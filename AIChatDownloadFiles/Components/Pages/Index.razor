@@ -1,0 +1,72 @@
+﻿@page "/"
+@rendermode InteractiveServer
+@using DevExpress.AIIntegration.Blazor.Chat
+@using DevExpress.AIIntegration.Chat
+@using AIChatDownloadFiles.Services
+@using Microsoft.Extensions.AI
+@using OpenAI
+@using OpenAI.Containers
+@using OpenAI.Responses
+@using Markdig
+@using Markdig.Syntax
+@using Markdig.Syntax.Inlines
+@using System.Text.RegularExpressions
+
+<DxAIChat>
+    <PromptSuggestions>
+        <DxAIChatPromptSuggestion Title="Generate Excel file" Text="Generate an Excel file with a multiplication table" PromptMessage="Generate an Excel file that shows the multiplication table." />
+    </PromptSuggestions>
+    <MessageContentTemplate>
+        @if (context.Role == ChatMessageRole.Assistant)
+        {
+            @ToHtmlWithLinks(context.Text, context.Contents)
+        }
+        else
+        {
+            @context.Text
+        }
+    </MessageContentTemplate>
+</DxAIChat>
+
+@code {
+    MarkupString ToHtmlWithLinks(string text, IReadOnlyList<AIContent> contents) {
+        var markDownDoc = Markdown.Parse(text);
+        foreach (var linkInline in markDownDoc.Descendants<LinkInline>()) {
+            var url = linkInline.Url;
+
+            if (!string.IsNullOrEmpty(url) && url.Contains("sandbox:")) {
+                var fileKey = GetUniqueFilePath(url, contents);
+                if (!string.IsNullOrEmpty(fileKey)) {
+                    linkInline.Url = $"downloads/{fileKey}";
+                }
+            }
+        }
+        return (MarkupString)markDownDoc.ToHtml();
+    }
+
+#pragma warning disable OPENAI001
+    string? GetUniqueFilePath(string sandboxFilePath, IReadOnlyList<AIContent> contents) {
+        var fileName = Path.GetFileName(sandboxFilePath);
+        string fileId = string.Empty;
+        string containerId = string.Empty;
+
+        foreach (var content in contents) {
+            var citation = content.Annotations?.OfType<CitationAnnotation>().FirstOrDefault(a =>
+                a.RawRepresentation is ContainerFileCitationMessageAnnotation
+                && a.Title == fileName
+            )?.RawRepresentation as ContainerFileCitationMessageAnnotation;
+
+            if (citation != null) {
+                containerId = citation.ContainerId;
+                fileId = citation.FileId;
+                break;
+            }
+        }
+
+        if (!string.IsNullOrEmpty(fileId)) {
+            return $"{containerId}/{fileId}/{fileName}";
+        }
+        return null;
+    }
+#pragma warning restore OPENAI001
+}
