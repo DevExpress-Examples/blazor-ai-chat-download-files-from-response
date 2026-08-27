@@ -64,7 +64,7 @@
         }
 
         if (!string.IsNullOrEmpty(fileId)) {
-            return $"{containerId}/{fileId}/{fileName}";
+            return $"{containerId}/{fileId}?filename={fileName}";
         }
         return null;
     }

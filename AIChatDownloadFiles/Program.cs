@@ -1,9 +1,12 @@
-﻿using AIChatDownloadFiles.Components;
+﻿using System.ClientModel;
+using System.Text.RegularExpressions;
+using AIChatDownloadFiles.Components;
 using AIChatDownloadFiles.Services;
 using Azure.AI.OpenAI;
 using DevExpress.AIIntegration;
 using DevExpress.AIIntegration.Agents;
 using Microsoft.Agents.AI;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.AI;
 using Microsoft.Extensions.FileProviders;
 using OpenAI;
@@ -59,13 +62,31 @@ app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode()
     .AllowAnonymous();
 
-app.MapGet("/downloads/{containerId}/{fileId}/{fileName}", async (string containerId, string fileId, string fileName) => {
-    BinaryData fileData = await openAIClient.GetContainerClient().DownloadContainerFileAsync(
-        containerId,
-        fileId);
+app.MapGet("/downloads/{containerId}/{fileId}", async (string containerId, string fileId, [FromQuery] string filename) => {
+    if(string.IsNullOrWhiteSpace(containerId) || string.IsNullOrWhiteSpace(fileId) || string.IsNullOrWhiteSpace(filename)
+        || containerId.Length > 128 || fileId.Length > 128 || filename.Length > 260) {
+        return Results.BadRequest();
+    }
 
-    var contentType = "application/octet-stream";
-    return Results.File(fileData.ToArray(), contentType, fileName);
+    if(!(Regex.IsMatch(containerId, @"^cntr_[a-z0-9]+$") && Regex.IsMatch(fileId, @"^cfile_[a-z0-9]+$") && filename.IndexOfAny(Path.GetInvalidFileNameChars()) < 0)) {
+        return Results.BadRequest();
+    }
+
+    try {
+        BinaryData fileData = await openAIClient.GetContainerClient().DownloadContainerFileAsync(
+            containerId,
+            fileId);
+        var contentType = "application/octet-stream";
+        return Results.File(fileData.ToArray(), contentType, filename);
+    }
+    catch(Exception ex) {
+        if(ex is ClientResultException clientEx && clientEx.Status == 404) {
+            return Results.NotFound();
+        }
+        else {
+            return Results.InternalServerError();
+        }
+    }
 });
 #pragma warning restore OPENAI001
 
