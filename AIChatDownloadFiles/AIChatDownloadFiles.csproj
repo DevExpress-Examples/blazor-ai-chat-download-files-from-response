@@ -5,8 +5,9 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Azure.AI.OpenAI" Version="*" />
     <PackageReference Include="Markdig" Version="*" />
+    <PackageReference Include="HtmlSanitizer" Version="*" />
+    <PackageReference Include="Azure.AI.OpenAI" Version="*" />
     <PackageReference Include="DevExpress.AIIntegration.Blazor" Version="26.1.4" />
     <PackageReference Include="DevExpress.AIIntegration.OpenAI" Version="26.1.4" />
     <PackageReference Include="DevExpress.AIIntegration.Agents" Version="26.1.4" />
