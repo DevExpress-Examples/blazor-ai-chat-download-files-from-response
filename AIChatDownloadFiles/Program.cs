@@ -2,16 +2,12 @@
 using System.Text.RegularExpressions;
 using AIChatDownloadFiles.Components;
 using AIChatDownloadFiles.Services;
-using Azure.AI.OpenAI;
-using DevExpress.AIIntegration;
 using DevExpress.AIIntegration.Agents;
 using Microsoft.Agents.AI;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.AI;
-using Microsoft.Extensions.FileProviders;
 using OpenAI;
 using OpenAI.Chat;
-using OpenAI.Containers;
 using OpenAI.Responses;
 
 var builder = WebApplication.CreateBuilder(args);
