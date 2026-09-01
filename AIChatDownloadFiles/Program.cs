@@ -75,13 +75,11 @@ app.MapGet("/downloads/{containerId}/{fileId}", async (string containerId, strin
         var contentType = "application/octet-stream";
         return Results.File(fileData.ToArray(), contentType, filename);
     }
-    catch(Exception ex) {
-        if(ex is ClientResultException clientEx && clientEx.Status == 404) {
-            return Results.NotFound();
-        }
-        else {
-            return Results.InternalServerError();
-        }
+    catch(ClientResultException clientEx) when(clientEx.Status == 404) {
+        return Results.NotFound();
+    }
+    catch {
+        return Results.StatusCode(500);
     }
 });
 #pragma warning restore OPENAI001

@@ -42,9 +42,9 @@
             }
         }
         foreach (var containerCitation in fileCitations.OrderByDescending(c => c.StartIndex)) {
-            var newUrl = $"downloads/{containerCitation.ContainerId}/{containerCitation.FileId}?filename={containerCitation.Filename}";
-            text = text.Remove(containerCitation.StartIndex, containerCitation.EndIndex - containerCitation.StartIndex);
-            text = text.Insert(containerCitation.StartIndex, newUrl);
+            var newUrl = $"downloads/{containerCitation.ContainerId}/{containerCitation.FileId}?filename={Uri.EscapeDataString(containerCitation.Filename)}";
+            text = text.Remove(containerCitation.StartIndex, containerCitation.EndIndex - containerCitation.StartIndex)
+                       .Insert(containerCitation.StartIndex, newUrl);
         }
         string html = Markdown.ToHtml(text);
         html = sanitizer.Sanitize(html);
