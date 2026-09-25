@@ -1,7 +1,6 @@
 ﻿using System.ClientModel;
 using System.Text.RegularExpressions;
 using AIChatDownloadFiles.Components;
-using AIChatDownloadFiles.Helpers;
 using AIChatDownloadFiles.Services;
 using DevExpress.AIIntegration.Agents;
 using Microsoft.Agents.AI;
@@ -65,7 +64,7 @@ app.MapGet("/downloads/{containerId}/{fileId}", async (string containerId, strin
         return Results.BadRequest();
     }
 
-    if(!(RegexHelper.ContainerIdRegex().IsMatch(containerId) && RegexHelper.FileIdRegex().IsMatch(fileId) && filename.IndexOfAny(Path.GetInvalidFileNameChars()) < 0)) {
+    if(!(Regex.IsMatch(containerId, @"^cntr_[a-z0-9]+$") && Regex.IsMatch(fileId, @"^cfile_[a-z0-9]+$") && filename.IndexOfAny(Path.GetInvalidFileNameChars()) < 0)) {
         return Results.BadRequest();
     }
 

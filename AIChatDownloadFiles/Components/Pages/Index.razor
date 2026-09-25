@@ -26,7 +26,8 @@
     private readonly HtmlSanitizer sanitizer = new HtmlSanitizer();
 
 #pragma warning disable OPENAI001
-    MarkupString ToHtmlWithFileLinks(string text, IReadOnlyList<AIContent> contents) {
+    MarkupString ToHtmlWithFileLinks(string text, IReadOnlyList<AIContent> contents)
+    {
         var fileCitations = new List<ContainerFileCitationMessageAnnotation>();
         foreach (var content in contents) {
             if (content.Annotations is null) {
