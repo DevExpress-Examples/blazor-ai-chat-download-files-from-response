@@ -64,7 +64,7 @@ app.MapGet("/downloads/{containerId}/{fileId}", async (string containerId, strin
         return Results.BadRequest();
     }
 
-    if(!(RegexHelper.ContainerRegex().IsMatch(containerId) && RegexHelper.FileIdRegex().IsMatch(fileId) && filename.IndexOfAny(Path.GetInvalidFileNameChars()) < 0)) {
+    if(!(RegexHelper.ContainerIdRegex().IsMatch(containerId) && RegexHelper.FileIdRegex().IsMatch(fileId) && filename.IndexOfAny(Path.GetInvalidFileNameChars()) < 0)) {
         return Results.BadRequest();
     }
 

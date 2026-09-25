@@ -3,7 +3,7 @@
 namespace AIChatDownloadFiles.Helpers {
     public static partial class RegexHelper {
         [GeneratedRegex(@"^cntr_[a-z0-9]+$", RegexOptions.IgnoreCase)]
-        public static partial Regex ContainerRegex();
+        public static partial Regex ContainerIdRegex();
 
         [GeneratedRegex(@"^cfile_[a-z0-9]+$", RegexOptions.IgnoreCase)]
         public static partial Regex FileIdRegex();
