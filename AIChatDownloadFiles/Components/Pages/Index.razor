@@ -11,12 +11,10 @@
         <DxAIChatPromptSuggestion Title="Generate Excel file" Text="Generate an Excel file with a multiplication table" PromptMessage="Generate an Excel file that shows the multiplication table." />
     </PromptSuggestions>
     <MessageContentTemplate>
-        @if (context.Role == ChatMessageRole.Assistant)
-        {
+        @if (context.Role == ChatMessageRole.Assistant) {
             @ToHtmlWithFileLinks(context.Text, context.Contents)
         }
-        else
-        {
+        else {
             @context.Text
         }
     </MessageContentTemplate>
