@@ -1,14 +1,14 @@
-﻿using AIChatDownloadFiles.Components;
+﻿using System.ClientModel;
+using System.Numerics;
+using AIChatDownloadFiles.Components;
+using AIChatDownloadFiles.Helpers;
 using AIChatDownloadFiles.Services;
-using Azure.AI.OpenAI;
-using DevExpress.AIIntegration;
 using DevExpress.AIIntegration.Agents;
 using Microsoft.Agents.AI;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.AI;
-using Microsoft.Extensions.FileProviders;
 using OpenAI;
 using OpenAI.Chat;
-using OpenAI.Containers;
 using OpenAI.Responses;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -59,13 +59,30 @@ app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode()
     .AllowAnonymous();
 
-app.MapGet("/downloads/{containerId}/{fileId}/{fileName}", async (string containerId, string fileId, string fileName) => {
-    BinaryData fileData = await openAIClient.GetContainerClient().DownloadContainerFileAsync(
-        containerId,
-        fileId);
+//Note: Please keep in mind that this example demonstrates the minimum required configuration to implement this functionality. As such, there are no security checks implemented for the API endpoint. In a real application, we recommend you take corresponding measures to ensure the endpoint is properly secured against potentially malicious requests. For example, you can add authorization as described in the Microsoft documentation (https://learn.microsoft.com/en-us/aspnet/core/fundamentals/minimal-apis/security?view=aspnetcore-10.0#configure-authorization-policies-in-minimal-apps) and implement custom resource-based access to ensure users can only download files that they generated themselves.
+app.MapGet("/downloads/{containerId}/{fileId}", async (string containerId, string fileId, [FromQuery] string filename) => {
+    if(string.IsNullOrWhiteSpace(containerId) || string.IsNullOrWhiteSpace(fileId) || string.IsNullOrWhiteSpace(filename)
+        || containerId.Length > 128 || fileId.Length > 128 || filename.Length > 260) {
+        return Results.BadRequest();
+    }
 
-    var contentType = "application/octet-stream";
-    return Results.File(fileData.ToArray(), contentType, fileName);
+    if(!(RegexHelper.ContainerIdRegex().IsMatch(containerId) && RegexHelper.FileIdRegex().IsMatch(fileId) && filename.IndexOfAny(Path.GetInvalidFileNameChars()) < 0)) {
+        return Results.BadRequest();
+    }
+
+    try {
+        BinaryData fileData = await openAIClient.GetContainerClient().DownloadContainerFileAsync(
+            containerId,
+            fileId);
+        var contentType = "application/octet-stream";
+        return Results.File(fileData.ToArray(), contentType, filename);
+    }
+    catch(ClientResultException clientEx) when(clientEx.Status == 404) {
+        return Results.NotFound();
+    }
+    catch {
+        return Results.StatusCode(500);
+    }
 });
 #pragma warning restore OPENAI001
 
