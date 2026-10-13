@@ -1,4 +1,5 @@
 ﻿using System.ClientModel;
+using System.Numerics;
 using AIChatDownloadFiles.Components;
 using AIChatDownloadFiles.Helpers;
 using AIChatDownloadFiles.Services;
@@ -58,6 +59,7 @@ app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode()
     .AllowAnonymous();
 
+//Note: Please keep in mind that this example demonstrates the minimum required configuration to implement this functionality. As such, there are no security checks implemented for the API endpoint. In a real application, we recommend you take corresponding measures to ensure the endpoint is properly secured against potentially malicious requests. For example, you can add authorization as described in the Microsoft documentation (https://learn.microsoft.com/en-us/aspnet/core/fundamentals/minimal-apis/security?view=aspnetcore-10.0#configure-authorization-policies-in-minimal-apps) and implement custom resource-based access to ensure users can only download files that they generated themselves.
 app.MapGet("/downloads/{containerId}/{fileId}", async (string containerId, string fileId, [FromQuery] string filename) => {
     if(string.IsNullOrWhiteSpace(containerId) || string.IsNullOrWhiteSpace(fileId) || string.IsNullOrWhiteSpace(filename)
         || containerId.Length > 128 || fileId.Length > 128 || filename.Length > 260) {
