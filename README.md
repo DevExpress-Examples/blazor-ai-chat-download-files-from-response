@@ -63,7 +63,7 @@ AI assistants can generate files in response to user messages. In such cases, AI
 4. Define the minimal API endpoint that handles requests to the "downloads" path. Validate `containerId` and `fileId` route parameters and the `filename` query parameter. Pass the IDs to the OpenAI Containers API to download the file.
 
 > [!WARNING]
-> This example demonstrates the minimum required configuration to implement this functionality. As such, the API endpoint has no authorization and authentication checks.
+> This example demonstrates the minimum configuration required to download AI-generated files. As such, the API endpoint has no authorization and authentication checks.
 >
 > In a real application, we recommend that you take corresponding measures to ensure the endpoint is properly secured against potentially malicious requests. For example, you can add authorization as described in the [Microsoft documentation](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/minimal-apis/security?view=aspnetcore-10.0#configure-authorization-policies-in-minimal-apps) and implement custom resource-based access to ensure users can only download files that they generated themselves.
 
