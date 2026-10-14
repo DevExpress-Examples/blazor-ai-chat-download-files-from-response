@@ -9,7 +9,7 @@ AI assistants can generate files in response to user messages. In such cases, AI
 
 ## Implementation Details
 
-1. Connect the DevExpress Blazor AI Chat to the [OpenAI](https://openai.com/) provider:
+1. Connect the [DevExpress Blazor AI Chat](https://docs.devexpress.com/Blazor/405290/ai-powered-extensions/ai-chat-component/ai-chat) to the [OpenAI](https://openai.com/) provider:
     - Install the NuGet packages listed in the following help topic: [Manual AI Services Integration - OpenAI](https://docs.devexpress.com/Blazor/405228/ai-powered-extensions#openai).
     - Install [Microsoft.Agents.AI.OpenAI](https://www.nuget.org/packages/Microsoft.Agents.AI.OpenAI) and [DevExpress.AIIntegration.Agents](https://www.nuget.org/packages/DevExpress.AIIntegration.Agents) packages to enable AI agent integration.
     - Specify your OpenAI API key and model name in the `OpenAISettings` section of the `appsettings.json` file (the `Key` and `DeploymentName` settings). The application throws an exception at startup if these settings are missing.
