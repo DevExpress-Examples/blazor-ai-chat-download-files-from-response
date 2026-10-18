@@ -12,7 +12,7 @@ AI assistants can generate files in response to user messages. In such cases, AI
 1. Connect the [DevExpress Blazor AI Chat](https://docs.devexpress.com/Blazor/405290/ai-powered-extensions/ai-chat-component/ai-chat) to the [OpenAI](https://openai.com/) provider:
     - Install the NuGet packages listed in the following help topic: [Manual AI Services Integration - OpenAI](https://docs.devexpress.com/Blazor/405228/ai-powered-extensions#openai).
     - Install [Microsoft.Agents.AI.OpenAI](https://www.nuget.org/packages/Microsoft.Agents.AI.OpenAI) and [DevExpress.AIIntegration.Agents](https://www.nuget.org/packages/DevExpress.AIIntegration.Agents) packages to enable AI agent integration.
-    - Specify your OpenAI API key and model name in the `OpenAISettings` section of the `appsettings.json` file (the `Key` and `DeploymentName` settings). If your code omits these settings, the application throws an exception at startup.
+    - Specify your OpenAI API key and model name in the `OpenAISettings` section of the `appsettings.json` file (`Key` and `DeploymentName` settings). If your code omits these settings, the application throws an exception at startup.
 
 2. Use [`HostedCodeInterpreterTool`](https://learn.microsoft.com/en-us/dotnet/api/microsoft.extensions.ai.hostedcodeinterpretertool) to allow the OpenAI Agent to generate files:
 
