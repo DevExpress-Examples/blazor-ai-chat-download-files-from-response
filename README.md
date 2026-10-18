@@ -40,7 +40,7 @@ AI assistants can generate files in response to user messages. In such cases, AI
     > [!WARNING]
     > This example demonstrates the minimum configuration required to download AI-generated files. As such, the API endpoint does not check authentication or authorization.
     >
-    > In a real application, In a real application, secure the endpoint against potentially malicious requests. For example, you can add authorization as described in the [Microsoft documentation](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/minimal-apis/security?view=aspnetcore-10.0#configure-authorization-policies-in-minimal-apps) and implement custom resource-based access to ensure users can only download files that they generated themselves.
+    > In a real application, secure the endpoint against potentially malicious requests. For example, you can add authorization as described in the [Microsoft documentation](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/minimal-apis/security?view=aspnetcore-10.0#configure-authorization-policies-in-minimal-apps) and implement custom resource-based access to ensure users can only download files that they generated themselves.
 
     ```cs
     public static partial class RegexHelper {
